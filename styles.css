@@ -1,0 +1,32 @@
+.Otsikko {
+    font-family: "Segoe UI";
+    text-align: center;
+}
+
+.Otsikko h1 {
+    font-size: 60px;
+}
+
+.profile-pic {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.Info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    right: -200px; /* Offset to the right */
+}
+
+/* Responsive Fix */
+@media (max-width: 500px) {
+    .Info {
+        right: -175px; /* Reduce offset for smaller screens */
+    }
+}
+
+
+
