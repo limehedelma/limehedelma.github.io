@@ -51,6 +51,15 @@ html, body {
     width: 0; /* Start at 0 */
     transition: width 5s;
 }
+.footer-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+
+
+}
 
 
 
