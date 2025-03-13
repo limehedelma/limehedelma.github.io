@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 export default function Home() {
   return (
       <>
-        <Window>
+        <Window title="Home">
             <div className="pt-32"></div>
             <div className="flex flex-col items-center">
                 <div className="relative w-[190px] h-[190px] group">

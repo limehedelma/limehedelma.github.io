@@ -1,10 +1,15 @@
 import React from 'react';
 
-export default function Window({ children }: { children: React.ReactNode }) {
+interface WindowProps {
+    title: string;
+    children: React.ReactNode;
+}
+
+export default function Window({ title, children }: WindowProps) {
     return (
         <div className="window active">
             <div className="title-bar">
-                <div className="title-bar-text">A window with contents</div>
+                <div className="title-bar-text">{title}</div>
                 <div className="title-bar-controls">
                     <button aria-label="Minimize"></button>
                     <button aria-label="Maximize"></button>
@@ -20,9 +25,10 @@ export default function Window({ children }: { children: React.ReactNode }) {
                 </ul>
             </div>
             <div className="window-body has-space min-h-screen" style={{ backgroundImage: 'url("bg.jpg")', backgroundSize: 'cover' }}>
-                {children} {/* This allows content to be inserted */}
+                {children}
             </div>
         </div>
     );
 }
+
 
