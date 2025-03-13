@@ -32,9 +32,8 @@ export default function Home() {
                 </p>
 
                 <motion.div
-                    className="mt-6 window glass active"
-                        drag
-                    /*Made for the whole screen on home page */
+                    className="mt-6 window glass active z-20"  // Added z-index here to ensure the window stays on top of the footer
+                    drag
                     dragConstraints={{ left: -450, top: -450, right: 450, bottom: 250 }}
                 >
                     <div className="title-bar">
@@ -63,7 +62,6 @@ export default function Home() {
 
 
             </div>
-
         </Window>
           <Footer/>
       </>
