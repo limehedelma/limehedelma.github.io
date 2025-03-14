@@ -10,11 +10,6 @@ export default function Window({ title, children }: WindowProps) {
         <div className="window active">
             <div className="title-bar">
                 <div className="title-bar-text">{title}</div>
-                <div className="title-bar-controls">
-                    <button aria-label="Minimize"></button>
-                    <button aria-label="Maximize"></button>
-                    <button aria-label="Close"></button>
-                </div>
             </div>
             <div className="menu">
                 <ul role="menubar">
