@@ -1,5 +1,5 @@
 import React from 'react';
-
+import "7.css/dist/7.css";
 interface WindowProps {
     title: string;
     children: React.ReactNode;
