@@ -11,6 +11,7 @@ export default function Home() {
 
     return (
         <>
+
             <div ref={constraintsRef} className="relative w-full h-screen">
                 <Window title="Home">
                     <div className="pt-32"></div>
