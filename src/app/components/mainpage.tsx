@@ -4,7 +4,6 @@ import Image from "next/image";
 import {AnimatePresence, motion} from "framer-motion";
 import { useRef, useState } from "react";
 import "7.css/dist/7.css";
-
 export default function Mainpage() {
     const constraintsRef = useRef(null);
     const [hasMoved, setHasMoved] = useState(false);
