@@ -6,7 +6,7 @@ interface WindowProps {
     children: React.ReactNode;
 }
 {/* Sivun rakenne*/}
-export default function Window({ title, children }: WindowProps) {
+export default function Mainwindow({ title, children }: WindowProps) {
     return (
         <div className="window active">
             <div className="title-bar">
@@ -14,10 +14,10 @@ export default function Window({ title, children }: WindowProps) {
             </div>
             <div className="menu">
                 <ul role="menubar">
-                    <li role="menuitem" tabIndex={0}>Home</li>
+                    <li role="menuitem" tabIndex={0}><a href="/Home">Home</a></li>
                     <li role="menuitem" tabIndex={0}><a href="/About">About me!</a></li>
-                    <li role="menuitem" tabIndex={0}>Projects</li>
-                    <li role="menuitem" tabIndex={0}>Contact Me!</li>
+                    <li role="menuitem" tabIndex={0}><a href="/Projects">Projects</a></li>
+                    <li role="menuitem" tabIndex={0}><a href="/Contact">Contact me!</a></li>
                 </ul>
             </div>
             <div className="window-body has-space min-h-screen" style={{ backgroundImage: 'url("bg.jpg")', backgroundSize: 'cover' }}>

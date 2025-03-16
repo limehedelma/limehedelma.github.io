@@ -1,8 +1,13 @@
+"use client";
+import Mainwindow from "../components/mainwindow";
 import React from 'react';
 
 export default function About() {
     return (
-        <div><p>Test</p></div>
+
+        <Mainwindow title="About">
+
+        </Mainwindow>
     );
 }
 

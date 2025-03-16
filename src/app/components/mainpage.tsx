@@ -31,7 +31,7 @@ export default function Mainpage() {
                     </div>
                     <p className="username">Emil Vento</p>
 
-                    {/* Draggable Window */}
+                    {/* Draggable Mainwindow */}
                     <div className="relative">
                         <motion.div
                             className="mt-6 window glass active z-20"
@@ -57,8 +57,8 @@ export default function Mainpage() {
                                 <p>This website is currently under construction!</p>
                                 <div className="flex justify-between">
                                     <button><a href="/About">About me!</a></button>
-                                    <button>Contact Me!</button>
-                                    <button>My Projects!</button>
+                                    <button><a href="/Contact">Contact me!</a></button>
+                                    <button><a href="/Projects">My Projects!</a>!</button>
                                     <button><a href="/olliAI/Homepage"> Olli AI</a></button>
                                 </div>
                             </div>

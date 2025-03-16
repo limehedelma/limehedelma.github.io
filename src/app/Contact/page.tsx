@@ -1,9 +1,12 @@
-import React from 'react';
-
-function Page() {
+"use client";
+import Mainwindow from "../components/mainwindow";
+import "7.css/dist/7.css";
+export default function Contact() {
     return (
-        <div><p>test</p></div>
+
+    <Mainwindow title="title">
+
+    </Mainwindow>
     );
 }
 
-export default Page;

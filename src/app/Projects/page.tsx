@@ -1,9 +1,12 @@
+"use client";
+import Mainwindow from "../components/mainwindow";
 import React from 'react';
 
-function Page() {
+export default function Projects() {
     return (
-        <div><p>test</p></div>
+        <Mainwindow title="Projects">
+<p>test</p>
+        </Mainwindow>
     );
 }
 
-export default Page;
