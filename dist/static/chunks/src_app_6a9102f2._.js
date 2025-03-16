@@ -25,6 +25,7 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
+const TIME_LIMIT = 120; // 2 minutes in seconds
 function Conversation() {
     _s();
     const conversation = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$11labs$2f$react$2f$dist$2f$lib$2e$modern$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["useConversation"])({
@@ -41,6 +42,9 @@ function Conversation() {
             "Conversation.useConversation[conversation]": (error)=>console.error('Virhe:', error)
         }["Conversation.useConversation[conversation]"]
     });
+    const timeoutRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const intervalRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const [timeLeft, setTimeLeft] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(TIME_LIMIT);
     const startConversation = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
         "Conversation.useCallback[startConversation]": async ()=>{
             try {
@@ -50,6 +54,27 @@ function Conversation() {
                 await conversation.startSession({
                     agentId: 'WLuieLxU04tbtp8gbRYU'
                 });
+                setTimeLeft(TIME_LIMIT);
+                // Start the countdown
+                intervalRef.current = setInterval({
+                    "Conversation.useCallback[startConversation]": ()=>{
+                        setTimeLeft({
+                            "Conversation.useCallback[startConversation]": (prev)=>{
+                                if (prev <= 1) {
+                                    stopConversation();
+                                    return 0;
+                                }
+                                return prev - 1;
+                            }
+                        }["Conversation.useCallback[startConversation]"]);
+                    }
+                }["Conversation.useCallback[startConversation]"], 1000);
+                // Set a timeout to stop conversation after 2 minutes
+                timeoutRef.current = setTimeout({
+                    "Conversation.useCallback[startConversation]": ()=>{
+                        stopConversation();
+                    }
+                }["Conversation.useCallback[startConversation]"], TIME_LIMIT * 1000);
             } catch (error) {
                 console.error('Keskustelun käynnistäminen epäonnistui:', error);
             }
@@ -60,10 +85,33 @@ function Conversation() {
     const stopConversation = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
         "Conversation.useCallback[stopConversation]": async ()=>{
             await conversation.endSession();
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+                timeoutRef.current = null;
+            }
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+                intervalRef.current = null;
+            }
+            setTimeLeft(0);
         }
     }["Conversation.useCallback[stopConversation]"], [
         conversation
     ]);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "Conversation.useEffect": ()=>{
+            return ({
+                "Conversation.useEffect": ()=>{
+                    if (timeoutRef.current) {
+                        clearTimeout(timeoutRef.current);
+                    }
+                    if (intervalRef.current) {
+                        clearInterval(intervalRef.current);
+                    }
+                }
+            })["Conversation.useEffect"];
+        }
+    }["Conversation.useEffect"], []);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "p-6 max-w-sm mx-auto shadow-lg rounded-2xl bg-white border flex flex-col items-center gap-4",
         children: [
@@ -84,18 +132,18 @@ function Conversation() {
                     size: 32
                 }, void 0, false, {
                     fileName: "[project]/src/app/components/conversation.tsx",
-                    lineNumber: 38,
+                    lineNumber: 82,
                     columnNumber: 56
                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$mic$2d$off$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__MicOff$3e$__["MicOff"], {
                     size: 32
                 }, void 0, false, {
                     fileName: "[project]/src/app/components/conversation.tsx",
-                    lineNumber: 38,
+                    lineNumber: 82,
                     columnNumber: 76
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/components/conversation.tsx",
-                lineNumber: 33,
+                lineNumber: 77,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -106,7 +154,7 @@ function Conversation() {
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/components/conversation.tsx",
-                lineNumber: 40,
+                lineNumber: 84,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -117,11 +165,50 @@ function Conversation() {
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/components/conversation.tsx",
-                lineNumber: 41,
+                lineNumber: 85,
                 columnNumber: 13
             }, this),
+            conversation.status === 'connected' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "w-full text-center",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        className: "text-sm font-medium text-gray-700",
+                        children: [
+                            "Aikaa jäljellä: ",
+                            Math.floor(timeLeft / 60),
+                            ":",
+                            (timeLeft % 60).toString().padStart(2, '0')
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/app/components/conversation.tsx",
+                        lineNumber: 91,
+                        columnNumber: 21
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "w-full bg-gray-200 rounded-full h-2.5 mt-1",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "h-2.5 rounded-full bg-blue-500 transition-all",
+                            style: {
+                                width: `${timeLeft / TIME_LIMIT * 100}%`
+                            }
+                        }, void 0, false, {
+                            fileName: "[project]/src/app/components/conversation.tsx",
+                            lineNumber: 95,
+                            columnNumber: 25
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/src/app/components/conversation.tsx",
+                        lineNumber: 94,
+                        columnNumber: 21
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/app/components/conversation.tsx",
+                lineNumber: 90,
+                columnNumber: 17
+            }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "flex gap-3",
+                className: "flex gap-3 mt-3",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         onClick: startConversation,
@@ -131,12 +218,12 @@ function Conversation() {
                             className: "animate-spin"
                         }, void 0, false, {
                             fileName: "[project]/src/app/components/conversation.tsx",
-                            lineNumber: 50,
+                            lineNumber: 109,
                             columnNumber: 61
                         }, this) : 'Aloita keskustelu'
                     }, void 0, false, {
                         fileName: "[project]/src/app/components/conversation.tsx",
-                        lineNumber: 45,
+                        lineNumber: 104,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -148,28 +235,28 @@ function Conversation() {
                             children: "Lopeta keskustelu"
                         }, void 0, false, {
                             fileName: "[project]/src/app/components/conversation.tsx",
-                            lineNumber: 53,
-                            columnNumber: 17
+                            lineNumber: 112,
+                            columnNumber: 21
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/app/components/conversation.tsx",
-                        lineNumber: 52,
+                        lineNumber: 111,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/components/conversation.tsx",
-                lineNumber: 44,
+                lineNumber: 103,
                 columnNumber: 13
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/components/conversation.tsx",
-        lineNumber: 32,
+        lineNumber: 76,
         columnNumber: 9
     }, this);
 }
-_s(Conversation, "Kbl4+S/b/VkKOXLhPelUPTuMM58=", false, function() {
+_s(Conversation, "Wp7NgdkaClDHXMbSda/tHxfmc7A=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$11labs$2f$react$2f$dist$2f$lib$2e$modern$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["useConversation"]
     ];
