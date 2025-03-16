@@ -10,10 +10,13 @@
   },
   "dependencies": {
     "@11labs/react": "^0.0.8",
+    "@shadcn/ui": "^0.0.4",
     "7.css": "^0.17.0",
+    "crypto-js": "^4.2.0",
     "elevenlabs": "^1.54.0",
     "framer-motion": "^12.5.0",
-    "next": "15.2.2",
+    "lucide-react": "^0.482.0",
+    "next": "^15.2.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-intersection-observer": "^9.16.0"
@@ -21,6 +24,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/crypto-js": "^4.2.2",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

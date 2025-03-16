@@ -57,7 +57,14 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$mo
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
                             role: "menuitem",
                             tabIndex: 0,
-                            children: "About Me"
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
+                                href: "/About",
+                                children: "About me!"
+                            }, void 0, false, {
+                                fileName: "[project]/src/app/components/window.tsx",
+                                lineNumber: 18,
+                                columnNumber: 54
+                            }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/app/components/window.tsx",
                             lineNumber: 18,
@@ -330,7 +337,14 @@ function Mainpage() {
                                                 className: "flex justify-between",
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                        children: "About me!"
+                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
+                                                            href: "/About",
+                                                            children: "About me!"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/components/mainpage.tsx",
+                                                            lineNumber: 59,
+                                                            columnNumber: 45
+                                                        }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/components/mainpage.tsx",
                                                         lineNumber: 59,
@@ -348,6 +362,20 @@ function Mainpage() {
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/components/mainpage.tsx",
                                                         lineNumber: 61,
+                                                        columnNumber: 37
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
+                                                            href: "/olliAI/Homepage",
+                                                            children: " Olli AI"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/components/mainpage.tsx",
+                                                            lineNumber: 62,
+                                                            columnNumber: 45
+                                                        }, this)
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/app/components/mainpage.tsx",
+                                                        lineNumber: 62,
                                                         columnNumber: 37
                                                     }, this)
                                                 ]
@@ -397,12 +425,12 @@ function Mainpage() {
                                     children: "This window is draggable, try it!"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/components/mainpage.tsx",
-                                    lineNumber: 69,
+                                    lineNumber: 70,
                                     columnNumber: 33
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/app/components/mainpage.tsx",
-                                lineNumber: 67,
+                                lineNumber: 68,
                                 columnNumber: 25
                             }, this)
                         ]

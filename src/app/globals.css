@@ -31,5 +31,31 @@ body {
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
   margin-top: -5px;
 }
+ button a {
+  color: inherit; /* Inherit text color from the button */
+  text-decoration: none; /* Remove default underline */
+}
+
+ button a:focus,
+ button a:active,
+button a:hover {
+  outline: none; /* Remove focus outline */
+  text-decoration: none; /* Ensure no underline appears */
+  color: inherit; /* Inherit text color from the button */
+}
+
+li a {
+    color: inherit; /* Inherit text color from the button */
+    text-decoration: none; /* Remove default underline */
+}
+
+li a:focus,
+li a:active,
+li a:hover {
+    outline: none; /* Remove focus outline */
+    text-decoration: none; /* Ensure no underline appears */
+    color: inherit; /* Inherit text color from the button */
+}
+
 
 

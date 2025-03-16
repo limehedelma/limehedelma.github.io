@@ -15,7 +15,7 @@ export default function Window({ title, children }: WindowProps) {
             <div className="menu">
                 <ul role="menubar">
                     <li role="menuitem" tabIndex={0}>Home</li>
-                    <li role="menuitem" tabIndex={0}>About Me</li>
+                    <li role="menuitem" tabIndex={0}><a href="/About">About me!</a></li>
                     <li role="menuitem" tabIndex={0}>Projects</li>
                     <li role="menuitem" tabIndex={0}>Contact Me!</li>
                 </ul>

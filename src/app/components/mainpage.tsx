@@ -56,9 +56,10 @@ export default function Mainpage() {
                                 </p>
                                 <p>This website is currently under construction!</p>
                                 <div className="flex justify-between">
-                                    <button>About me!</button>
+                                    <button><a href="/About">About me!</a></button>
                                     <button>Contact Me!</button>
                                     <button>My Projects!</button>
+                                    <button><a href="/olliAI/Homepage"> Olli AI</a></button>
                                 </div>
                             </div>
                         </motion.div>
