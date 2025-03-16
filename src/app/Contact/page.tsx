@@ -5,7 +5,7 @@ export default function Contact() {
     return (
 
     <Mainwindow title="title">
-
+<p>test</p>
     </Mainwindow>
     );
 }

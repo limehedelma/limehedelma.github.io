@@ -6,7 +6,7 @@ export default function About() {
     return (
 
         <Mainwindow title="About">
-
+<p>test</p>
         </Mainwindow>
     );
 }
