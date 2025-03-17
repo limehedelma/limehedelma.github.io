@@ -1,6 +1,6 @@
 "use client";
-import Mainwindow from "../components/mainwindow";
-import MainPage from "../components/mainpage";
+import Mainwindow from "./components/mainwindow";
+import MainPage from "./components/mainpage";
 
 
 export default function Home() {

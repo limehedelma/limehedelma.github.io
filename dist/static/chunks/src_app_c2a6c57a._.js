@@ -41,7 +41,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$mo
                             role: "menuitem",
                             tabIndex: 0,
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
-                                href: "/Home",
+                                href: "/",
                                 children: "Home"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/components/mainwindow.tsx",
@@ -237,7 +237,14 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$components$2f$
 ;
 function Contact() {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$components$2f$mainwindow$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-        title: "title"
+        title: "title",
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+            children: "test"
+        }, void 0, false, {
+            fileName: "[project]/src/app/Contact/page.tsx",
+            lineNumber: 8,
+            columnNumber: 1
+        }, this)
     }, void 0, false, {
         fileName: "[project]/src/app/Contact/page.tsx",
         lineNumber: 7,
