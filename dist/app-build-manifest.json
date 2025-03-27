@@ -1,14 +1,32 @@
 {
   "pages": {
-    "/Contact/page": [
+    "/olliAI/Homepage/page": [
       "static/chunks/node_modules_next_dist_1a6ee436._.js",
       "static/chunks/src_app_favicon_ico_mjs_79b6a596._.js",
       "static/chunks/[root of the server]__140ccadf._.css",
       "static/chunks/src_app_layout_tsx_f0e4c1a2._.js",
-      "static/chunks/node_modules_beb2c83a._.js",
-      "static/chunks/src_app_c2a6c57a._.js",
-      "static/chunks/node_modules_7_css_dist_7_96095ca8.css",
-      "static/chunks/src_app_Contact_page_tsx_1fa45077._.js",
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_2a266d5a._.js",
+      "static/chunks/node_modules_next_dist_9a2d5fdb._.js",
+      "static/chunks/src_app_olliAI_Homepage_page_tsx_1fa45077._.js",
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_49a6ea35._.js",
+      "static/chunks/node_modules_next_dist_compiled_2ce9398a._.js",
+      "static/chunks/node_modules_next_dist_client_43e3ffb8._.js",
+      "static/chunks/node_modules_next_dist_3bfaed20._.js",
+      "static/chunks/node_modules_@swc_helpers_cjs_00636ac3._.js",
+      "static/chunks/_e69f0d32._.js",
+      "static/chunks/_be317ff2._.js"
+    ],
+    "/olliAI/chat/page": [
+      "static/chunks/node_modules_next_dist_1a6ee436._.js",
+      "static/chunks/src_app_favicon_ico_mjs_79b6a596._.js",
+      "static/chunks/[root of the server]__140ccadf._.css",
+      "static/chunks/src_app_layout_tsx_f0e4c1a2._.js",
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_8acebc06._.js",
+      "static/chunks/node_modules_crypto-js_e5d7b1b3._.js",
+      "static/chunks/node_modules_framer-motion_dist_es_2e6f230b._.js",
+      "static/chunks/node_modules_e18027e2._.js",
+      "static/chunks/src_app_6a9102f2._.js",
+      "static/chunks/src_app_olliAI_chat_page_tsx_1fa45077._.js",
       "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_49a6ea35._.js",
       "static/chunks/node_modules_next_dist_compiled_2ce9398a._.js",
       "static/chunks/node_modules_next_dist_client_43e3ffb8._.js",
