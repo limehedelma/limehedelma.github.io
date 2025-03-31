@@ -479,30 +479,6 @@
     }
   }
 
-  .m-29 {
-    margin: calc(var(--spacing) * 29);
-  }
-
-  .m-29\.5 {
-    margin: calc(var(--spacing) * 29.5);
-  }
-
-  .m-40 {
-    margin: calc(var(--spacing) * 40);
-  }
-
-  .m-44 {
-    margin: calc(var(--spacing) * 44);
-  }
-
-  .m-52 {
-    margin: calc(var(--spacing) * 52);
-  }
-
-  .m-56 {
-    margin: calc(var(--spacing) * 56);
-  }
-
   .mx-auto {
     margin-inline: auto;
   }
