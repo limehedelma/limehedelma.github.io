@@ -49,6 +49,14 @@ export default function Mainwindow({ title, children }: WindowProps) {
                     >
                         <img src="discord-icon.svg" alt="Discord" width="25" />
                     </motion.a>
+                    <motion.a
+                        href="https://limehedelma.itch.io/"
+                        aria-label="Itchio"
+                        whileHover={{ scale: 1.2 }}
+                        whileTap={{ scale: 0.8 }}
+                    >
+                        <img src="itchio-logo-textless-white.svg" alt="Itch" width="25" />
+                    </motion.a>
                 </div>
             </div>
         </div>
