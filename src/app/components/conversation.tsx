@@ -5,7 +5,7 @@ import { Mic, MicOff, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Link from "next/link";
 
-const TIME_LIMIT = 120; // 2 minutes in seconds
+
 
 export function Conversation() {
     const conversation = useConversation({
@@ -17,7 +17,7 @@ export function Conversation() {
 
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
-    const [timeLeft, setTimeLeft] = useState(TIME_LIMIT);
+
 
     const startConversation = useCallback(async () => {
         try {
@@ -26,23 +26,6 @@ export function Conversation() {
                 agentId: 'WLuieLxU04tbtp8gbRYU',
             });
 
-            setTimeLeft(TIME_LIMIT);
-
-            // Start the countdown
-            intervalRef.current = setInterval(() => {
-                setTimeLeft((prev) => {
-                    if (prev <= 1) {
-                        stopConversation();
-                        return 0;
-                    }
-                    return prev - 1;
-                });
-            }, 1000);
-
-            // Set a timeout to stop conversation after 2 minutes
-            timeoutRef.current = setTimeout(() => {
-                stopConversation();
-            }, TIME_LIMIT * 1000);
         } catch (error) {
             console.error('Keskustelun käynnistäminen epäonnistui:', error);
         }
@@ -50,15 +33,7 @@ export function Conversation() {
 
     const stopConversation = useCallback(async () => {
         await conversation.endSession();
-        if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current);
-            timeoutRef.current = null;
-        }
-        if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-            intervalRef.current = null;
-        }
-        setTimeLeft(0);
+
     }, [conversation]);
 
     useEffect(() => {
@@ -88,13 +63,10 @@ export function Conversation() {
 
             {conversation.status === 'connected' && (
                 <div className="w-full text-center">
-                    <p className="text-sm font-medium text-gray-700">
-                        Aikaa jäljellä: {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
-                    </p>
                     <div className="w-full bg-gray-200 rounded-full h-2.5 mt-1">
                         <div
                             className="h-2.5 rounded-full bg-blue-500 transition-all"
-                            style={{ width: `${(timeLeft / TIME_LIMIT) * 100}%` }}
+
                         />
                     </div>
                 </div>
