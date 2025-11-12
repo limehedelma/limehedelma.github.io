@@ -41,174 +41,113 @@ const data = {
     },
   ],
   navMain: [
+      {
+          title: "About Me",
+          url: "#",
+          icon: BookOpen,
+      },
     {
-      title: "Playground",
+      title: "Projects",
       url: "#",
       icon: SquareTerminal,
       isActive: true,
       items: [
         {
-          title: "History",
+          title: "Soapbox Racing",
           url: "#",
         },
+          {
+              title: "Dank Sweeper",
+              url: "#",
+          },
         {
-          title: "Starred",
+          title: "SAJL tulospalvelu",
           url: "#",
         },
+          {
+              title: "olli AI",
+              url: "#",
+          },
         {
-          title: "Settings",
+          title: "Careeria 1989",
           url: "#",
         },
+          {
+              title: "Raccoon Loves Bubbles",
+              url: "#",
+          }
       ],
     },
-    {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
+      {
+          title: "Contact",
           url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
-    },
+          icon: BookOpen,
+          items: [
+              {
+                  title: "Gmail",
+                  url: "#",
+              },
+              {
+                  title: "Discord",
+                  url: "#",
+              },
+              {
+                  title: "Github",
+                  url: "#",
+              },
+              {
+                  title: "Itch.io",
+                  url: "#",
+              },
+          ],
+      },
   ],
     projects: [
         {
-            title: "Testi",
+            title: "About Me",
             url: "#",
             icon: SquareTerminal,
+        },
+        {
+            title: "Teams",
+            url: "#",
+            icon: Bot,
             isActive: true,
             items: [
                 {
-                    title: "History",
+                    title: "Porvoon Butchers",
                     url: "#",
                 },
                 {
-                    title: "Starred",
+                    title: "Finland u17 National team",
                     url: "#",
                 },
                 {
-                    title: "Settings",
+                    title: "East City Giants u17",
                     url: "#",
                 },
             ],
         },
         {
-            title: "Models",
-            url: "#",
-            icon: Bot,
-            items: [
-                {
-                    title: "Genesis",
-                    url: "#",
-                },
-                {
-                    title: "Explorer",
-                    url: "#",
-                },
-                {
-                    title: "Quantum",
-                    url: "#",
-                },
-            ],
-        },
-        {
-            title: "Documentation",
+            title: "Acomplishments",
             url: "#",
             icon: BookOpen,
-            items: [
-                {
-                    title: "Introduction",
-                    url: "#",
-                },
-                {
-                    title: "Get Started",
-                    url: "#",
-                },
-                {
-                    title: "Tutorials",
-                    url: "#",
-                },
-                {
-                    title: "Changelog",
-                    url: "#",
-                },
-            ],
         },
         {
-            title: "Settings",
+            title: " My Social Medias",
             url: "#",
             icon: Settings2,
             items: [
                 {
-                    title: "General",
+                    title: "Instagram",
                     url: "#",
                 },
                 {
-                    title: "Team",
+                    title: "Tiktok",
                     url: "#",
                 },
                 {
-                    title: "Billing",
-                    url: "#",
-                },
-                {
-                    title: "Limits",
+                    title: "X",
                     url: "#",
                 },
             ],

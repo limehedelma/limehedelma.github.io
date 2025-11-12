@@ -2,5 +2,5 @@
   "version": 3,
   "sources": [],
   "sections": [
-    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file:///Users/emilvento/Documents/GitHub/limehedelma.github.io/src/app/page.tsx"],"sourcesContent":["\"use client\";\nimport {\n    Menubar,\n    MenubarContent,\n    MenubarItem,\n    MenubarMenu,\n    MenubarSeparator,\n    MenubarShortcut,\n    MenubarTrigger,\n} from \"@/components/ui/menubar\"\n\nexport default function Home() {\n\n    return (\n        <>\n\n        </>\n    );\n}\n"],"names":[],"mappings":";;;;AAAA;;AAWe,SAAS;IAEpB,qBACI;AAIR;KAPwB","debugId":null}}]
+    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file:///Users/emilvento/Documents/GitHub/limehedelma.github.io/src/app/page.tsx"],"sourcesContent":["\"use client\";\n\n\nexport default function Home() {\n\n    return (\n        <>\n\n        </>\n    );\n}\n"],"names":[],"mappings":";;;;AAAA;;AAGe,SAAS;IAEpB,qBACI;AAIR;KAPwB","debugId":null}}]
 }
