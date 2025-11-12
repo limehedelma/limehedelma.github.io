@@ -1,7 +1,7 @@
 'use client';
 import * as CryptoJS from "crypto-js";
 import { useState, useEffect } from "react";
-import { Conversation } from "@/app/components/conversation";
+import { Conversation } from "@/components/conversation";
 import { motion } from "framer-motion";
 import { Lock, LogOut } from "lucide-react";
 

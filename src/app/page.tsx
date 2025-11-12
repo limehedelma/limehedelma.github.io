@@ -1,15 +1,19 @@
 "use client";
-import Mainwindow from "./components/mainwindow";
-import MainPage from "./components/mainpage";
-
+import {
+    Menubar,
+    MenubarContent,
+    MenubarItem,
+    MenubarMenu,
+    MenubarSeparator,
+    MenubarShortcut,
+    MenubarTrigger,
+} from "@/components/ui/menubar"
 
 export default function Home() {
 
     return (
         <>
-            <Mainwindow title="Home">
-                <MainPage />
-                </Mainwindow>
+
         </>
     );
 }
