@@ -34,7 +34,7 @@ export default function Mainwindow({ title, children }: WindowProps) {
                     </motion.a>
 
                     <motion.a
-                        href="mailto:lime.vento@outlook.com"
+                        href="mailto:limehedelma@gmail.com"
                         whileHover={{ scale: 1.2 }}
                         whileTap={{ scale: 0.8 }}
                     >
