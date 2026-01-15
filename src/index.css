@@ -1,3 +1,11 @@
-@tailwind base;
-@tailwind components;
+/* Utilities layer: all utility classes */
 @tailwind utilities;
+
+/* Lukitaan näkymä täyteen korkeuteen ja estetään sivun scrollaus */
+html,
+body,
+#root {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
