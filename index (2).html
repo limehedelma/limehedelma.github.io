@@ -10,16 +10,15 @@
     body { background: #000; margin: 0; padding: 0; }
 
     .board {
-      --glow-rgb: 255, 102, 0;
-      --text-color: #fa0;
+      --glow-rgb: 255, 160, 0;
+      --text-color: #ffa500;
       --danger-fill-color: #f23;
       --danger-glow-rgb: 255, 0, 0;
       --danger-text-color: #f30;
-      --info-glow-rgb: 0, 170, 0;
+      --info-glow-rgb: 0, 255, 0;
       --info-text-color: #00ff00;
       --gutter-size: 8px;
-      padding-left: 1rem;
-      padding-top: 1rem;
+      padding: 6px;
     }
 
     .piece {
@@ -177,19 +176,11 @@
       width: 100vw;
     }
 
-    #topbar {
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 8px 12px;
-    }
-
     #body {
       flex: 1;
       display: flex;
       min-height: 0;
-      padding: 0 6px 6px 6px;
+      padding: 6px;
       gap: 6px;
     }
 
@@ -222,15 +213,24 @@
       min-width: 0;
     }
 
+    #terminal-topbar {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 8px;
+      border-bottom: 2px solid rgba(0,255,0,.3);
+    }
+
     #output {
       flex: 1;
       overflow-y: auto;
       padding: 6px 8px;
       scrollbar-width: thin;
-      scrollbar-color: rgba(255,102,0,.25) transparent;
+      scrollbar-color: rgba(255,160,0,.25) transparent;
     }
     #output::-webkit-scrollbar { width: 3px; }
-    #output::-webkit-scrollbar-thumb { background: rgba(255,102,0,.25); }
+    #output::-webkit-scrollbar-thumb { background: rgba(255,160,0,.25); }
 
     #input-row {
       flex-shrink: 0;
@@ -238,7 +238,7 @@
       align-items: center;
       gap: 6px;
       padding: 4px 8px;
-      border-top: 2px solid rgba(255,102,0,.3);
+      border-top: 2px solid rgba(0,255,0,.3);
     }
 
     #cmd {
@@ -252,7 +252,7 @@
       color: #00ff00;
       caret-color: #00ff00;
     }
-    #cmd::placeholder { color: rgba(0,170,0,.3); font: 400 22px 'Roboto Condensed'; }
+    #cmd::placeholder { color: rgba(0,255,0,.3); font: 400 22px 'Roboto Condensed'; }
 
     .nav-btn {
       background: none;
@@ -264,13 +264,23 @@
       text-align: left;
     }
     .nav-btn .label { font-size: 22px; width: 100%; display: block; }
+    /* active: green for normal, keep red for danger */
     .nav-btn.active .label {
       --text-glow-color: rgba(var(--info-glow-rgb), .6);
       color: var(--info-text-color);
     }
-    .nav-btn:hover .label {
+    .nav-btn.active .label.--danger {
+      color: var(--danger-text-color) !important;
+      --text-glow-color: rgba(var(--danger-glow-rgb), .5);
+    }
+    /* hover: green blink for normal labels only */
+    .nav-btn:hover .label:not(.--danger) {
       --text-glow-color: rgba(var(--info-glow-rgb), .6);
       color: var(--info-text-color);
+      animation: blink 1.5s steps(1) infinite;
+    }
+    /* hover: red blink for danger labels */
+    .nav-btn:hover .label.--danger {
       animation: blink 1.5s steps(1) infinite;
     }
 
@@ -315,23 +325,15 @@
 
 <div id="shell" class="board">
 
-  <!-- TOP BAR -->
-  <div id="topbar">
-    <button id="toggle-sidebar">
-      <span class="label -bordered --info" style="font-size:18px;" id="toggle-label">▶ SHOW</span>
-    </button>
-    <div class="label -bordered" id="clock" style="padding-left:20px;padding-right:20px;">00:00:00</div>
-  </div>
-
   <!-- BODY -->
   <div id="body">
 
     <!-- SIDEBAR -->
-    <div id="sidebar" class="-bordered --info --block collapsed" style="border-width:5px;">
+    <div id="sidebar" class="-bordered --info --block collapsed" style="border-width:3px;">
 
       <!-- QR + domain at top -->
-      <div class="-bordered --info --block" style="border-width:3px;border-style:solid;border-color:rgba(0,170,0,.7);display:flex;flex-direction:column;align-items:center;padding:4px 4px 2px 4px;gap:2px;">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" shape-rendering="crispEdges" style="width:80px;height:80px;color:#fa0;"><path fill="none" d="M0 0h33v33H0z"/><path stroke="currentColor" d="M4 4.5h7m3 0h1m1 0h2m2 0h1m1 0h7M4 5.5h1m5 0h1m2 0h2m3 0h2m2 0h1m5 0h1M4 6.5h1m1 0h3m1 0h1m1 0h4m2 0h3m1 0h1m1 0h3m1 0h1M4 7.5h1m1 0h3m1 0h1m1 0h4m1 0h2m3 0h1m1 0h3m1 0h1M4 8.5h1m1 0h3m1 0h1m1 0h2m6 0h1m1 0h1m1 0h3m1 0h1M4 9.5h1m5 0h1m1 0h1m2 0h2m2 0h2m1 0h1m5 0h1M4 10.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M12 11.5h2m2 0h1m1 0h3M4 12.5h1m1 0h5m3 0h1m2 0h1m1 0h1m2 0h5M4 13.5h1m2 0h3m1 0h2m1 0h1m2 0h1m2 0h1m2 0h1m3 0h1M6 14.5h1m2 0h4m1 0h1m2 0h3m5 0h1m1 0h2M5 15.5h2m1 0h1m2 0h3m2 0h1m2 0h6m3 0h1M5 16.5h2m1 0h3m3 0h1m1 0h4m1 0h2m1 0h1m1 0h3M4 17.5h4m1 0h1m1 0h1m1 0h2m5 0h1m2 0h1m1 0h1m1 0h1M4 18.5h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h3m1 0h3m1 0h3m1 0h2M4 19.5h1m2 0h2m6 0h1m2 0h7m3 0h1M4 20.5h1m1 0h1m1 0h1m1 0h2m2 0h2m1 0h8m1 0h1M12 21.5h1m1 0h1m1 0h2m1 0h2m3 0h2M4 22.5h7m6 0h2m1 0h1m1 0h1m1 0h1m1 0h3M4 23.5h1m5 0h1m1 0h2m2 0h1m1 0h1m1 0h1m3 0h2m1 0h1M4 24.5h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h9m1 0h3M4 25.5h1m1 0h3m1 0h1m1 0h1m4 0h1m1 0h1m1 0h2m1 0h5M4 26.5h1m1 0h3m1 0h1m1 0h5m1 0h3m4 0h2m1 0h1M4 27.5h1m5 0h1m2 0h1m1 0h1m2 0h8m2 0h1M4 28.5h7m1 0h1m1 0h3m4 0h8"/></svg>
+      <div class="-bordered --info --block" style="border-width:3px;border-style:solid;border-color:rgba(0,255,0,.7);display:flex;flex-direction:column;align-items:center;padding:4px 4px 2px 4px;gap:2px;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" shape-rendering="crispEdges" style="width:80px;height:80px;color:#ffa500;"><path fill="none" d="M0 0h33v33H0z"/><path stroke="currentColor" d="M4 4.5h7m3 0h1m1 0h2m2 0h1m1 0h7M4 5.5h1m5 0h1m2 0h2m3 0h2m2 0h1m5 0h1M4 6.5h1m1 0h3m1 0h1m1 0h4m2 0h3m1 0h1m1 0h3m1 0h1M4 7.5h1m1 0h3m1 0h1m1 0h4m1 0h2m3 0h1m1 0h3m1 0h1M4 8.5h1m1 0h3m1 0h1m1 0h2m6 0h1m1 0h1m1 0h3m1 0h1M4 9.5h1m5 0h1m1 0h1m2 0h2m2 0h2m1 0h1m5 0h1M4 10.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M12 11.5h2m2 0h1m1 0h3M4 12.5h1m1 0h5m3 0h1m2 0h1m1 0h1m2 0h5M4 13.5h1m2 0h3m1 0h2m1 0h1m2 0h1m2 0h1m2 0h1m3 0h1M6 14.5h1m2 0h4m1 0h1m2 0h3m5 0h1m1 0h2M5 15.5h2m1 0h1m2 0h3m2 0h1m2 0h6m3 0h1M5 16.5h2m1 0h3m3 0h1m1 0h4m1 0h2m1 0h1m1 0h3M4 17.5h4m1 0h1m1 0h1m1 0h2m5 0h1m2 0h1m1 0h1m1 0h1M4 18.5h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h3m1 0h3m1 0h3m1 0h2M4 19.5h1m2 0h2m6 0h1m2 0h7m3 0h1M4 20.5h1m1 0h1m1 0h1m1 0h2m2 0h2m1 0h8m1 0h1M12 21.5h1m1 0h1m1 0h2m1 0h2m3 0h2M4 22.5h7m6 0h2m1 0h1m1 0h1m1 0h1m1 0h3M4 23.5h1m5 0h1m1 0h2m2 0h1m1 0h1m1 0h1m3 0h2m1 0h1M4 24.5h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h9m1 0h3M4 25.5h1m1 0h3m1 0h1m1 0h1m4 0h1m1 0h1m1 0h2m1 0h5M4 26.5h1m1 0h3m1 0h1m1 0h5m1 0h3m4 0h2m1 0h1M4 27.5h1m5 0h1m2 0h1m1 0h1m2 0h8m2 0h1M4 28.5h7m1 0h1m1 0h3m4 0h8"/></svg>
         <div class="label --info --block" style="font-size:14px;text-align:center;width:100%;box-sizing:border-box;">limehedelma.com</div>
       </div>
 
@@ -358,7 +360,13 @@
     </div>
 
     <!-- TERMINAL -->
-    <div id="terminal" class="-bordered --block" style="border-width:5px;">
+    <div id="terminal" class="-bordered --info --block" style="border-width:3px;">
+      <div id="terminal-topbar">
+        <button id="toggle-sidebar">
+          <span class="label -bordered --info" style="font-size:18px;" id="toggle-label">▶ SHOW</span>
+        </button>
+        <div class="label -bordered --info" id="clock" style="padding-left:20px;padding-right:20px;">00:00:00</div>
+      </div>
       <div id="output"></div>
       <div id="input-row">
         <span class="label --info -blink" style="font-size:22px;">$&gt;</span>
@@ -384,6 +392,23 @@
 
   const output = document.getElementById('output');
   const input  = document.getElementById('cmd');
+  let awaitingYN = null;
+
+  function buildAboutMoreCard() {
+    return `
+      <div style="display:block;">
+        <span class="label --info" style="font-size:20px;font-weight:600;letter-spacing:3px;display:block;margin-bottom:6px;">// More About Emil</span>
+        <span class="label --info" style="font-size:16px;white-space:normal;display:block;line-height:1.5;margin-bottom:6px;">
+          I'm a junior developer based in Finland, currently studying at a vocational college. I have a passion for building cool web experiences and games that push creative boundaries.
+        </span>
+        <span class="label --info" style="font-size:16px;white-space:normal;display:block;line-height:1.5;margin-bottom:6px;">
+          On the web side I work mainly with Angular, Ionic and Next.js — building everything from portfolio sites to mobile-first apps. On the game dev side I use Unity and C# to create jam games and prototypes.
+        </span>
+        <span class="label --info" style="font-size:16px;white-space:normal;display:block;line-height:1.5;">
+          Always looking to collaborate, learn and ship interesting projects. Feel free to reach out via the Contact page.
+        </span>
+      </div>`;
+  }
 
   // ── STATIC REVEAL ──
   function revealCard(html, delay = 0) {
@@ -438,41 +463,75 @@
 
   // ── PORTFOLIO COMPONENTS ──
 
-  const QR_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" shape-rendering="crispEdges" style="width:80px;height:80px;color:#fa0;"><path fill="none" d="M0 0h33v33H0z"/><path stroke="currentColor" d="M4 4.5h7m3 0h1m1 0h2m2 0h1m1 0h7M4 5.5h1m5 0h1m2 0h2m3 0h2m2 0h1m5 0h1M4 6.5h1m1 0h3m1 0h1m1 0h4m2 0h3m1 0h1m1 0h3m1 0h1M4 7.5h1m1 0h3m1 0h1m1 0h4m1 0h2m3 0h1m1 0h3m1 0h1M4 8.5h1m1 0h3m1 0h1m1 0h2m6 0h1m1 0h1m1 0h3m1 0h1M4 9.5h1m5 0h1m1 0h1m2 0h2m2 0h2m1 0h1m5 0h1M4 10.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M12 11.5h2m2 0h1m1 0h3M4 12.5h1m1 0h5m3 0h1m2 0h1m1 0h1m2 0h5M4 13.5h1m2 0h3m1 0h2m1 0h1m2 0h1m2 0h1m2 0h1m3 0h1M6 14.5h1m2 0h4m1 0h1m2 0h3m5 0h1m1 0h2M5 15.5h2m1 0h1m2 0h3m2 0h1m2 0h6m3 0h1M5 16.5h2m1 0h3m3 0h1m1 0h4m1 0h2m1 0h1m1 0h3M4 17.5h4m1 0h1m1 0h1m1 0h2m5 0h1m2 0h1m1 0h1m1 0h1M4 18.5h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h3m1 0h3m1 0h3m1 0h2M4 19.5h1m2 0h2m6 0h1m2 0h7m3 0h1M4 20.5h1m1 0h1m1 0h1m1 0h2m2 0h2m1 0h8m1 0h1M12 21.5h1m1 0h1m1 0h2m1 0h2m3 0h2M4 22.5h7m6 0h2m1 0h1m1 0h1m1 0h1m1 0h3M4 23.5h1m5 0h1m1 0h2m2 0h1m1 0h1m1 0h1m3 0h2m1 0h1M4 24.5h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h9m1 0h3M4 25.5h1m1 0h3m1 0h1m1 0h1m4 0h1m1 0h1m1 0h2m1 0h5M4 26.5h1m1 0h3m1 0h1m1 0h5m1 0h3m4 0h2m1 0h1M4 27.5h1m5 0h1m2 0h1m1 0h1m2 0h8m2 0h1M4 28.5h7m1 0h1m1 0h3m4 0h8"/></svg>`;
+  const QR_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" shape-rendering="crispEdges" style="width:80px;height:80px;color:#00ff00;"><path fill="none" d="M0 0h33v33H0z"/><path stroke="currentColor" d="M4 4.5h7m3 0h1m1 0h2m2 0h1m1 0h7M4 5.5h1m5 0h1m2 0h2m3 0h2m2 0h1m5 0h1M4 6.5h1m1 0h3m1 0h1m1 0h4m2 0h3m1 0h1m1 0h3m1 0h1M4 7.5h1m1 0h3m1 0h1m1 0h4m1 0h2m3 0h1m1 0h3m1 0h1M4 8.5h1m1 0h3m1 0h1m1 0h2m6 0h1m1 0h1m1 0h3m1 0h1M4 9.5h1m5 0h1m1 0h1m2 0h2m2 0h2m1 0h1m5 0h1M4 10.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M12 11.5h2m2 0h1m1 0h3M4 12.5h1m1 0h5m3 0h1m2 0h1m1 0h1m2 0h5M4 13.5h1m2 0h3m1 0h2m1 0h1m2 0h1m2 0h1m2 0h1m3 0h1M6 14.5h1m2 0h4m1 0h1m2 0h3m5 0h1m1 0h2M5 15.5h2m1 0h1m2 0h3m2 0h1m2 0h6m3 0h1M5 16.5h2m1 0h3m3 0h1m1 0h4m1 0h2m1 0h1m1 0h3M4 17.5h4m1 0h1m1 0h1m1 0h2m5 0h1m2 0h1m1 0h1m1 0h1M4 18.5h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h3m1 0h3m1 0h3m1 0h2M4 19.5h1m2 0h2m6 0h1m2 0h7m3 0h1M4 20.5h1m1 0h1m1 0h1m1 0h2m2 0h2m1 0h8m1 0h1M12 21.5h1m1 0h1m1 0h2m1 0h2m3 0h2M4 22.5h7m6 0h2m1 0h1m1 0h1m1 0h1m1 0h3M4 23.5h1m5 0h1m1 0h2m2 0h1m1 0h1m1 0h1m3 0h2m1 0h1M4 24.5h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h9m1 0h3M4 25.5h1m1 0h3m1 0h1m1 0h1m4 0h1m1 0h1m1 0h2m1 0h5M4 26.5h1m1 0h3m1 0h1m1 0h5m1 0h3m4 0h2m1 0h1M4 27.5h1m5 0h1m2 0h1m1 0h1m2 0h8m2 0h1M4 28.5h7m1 0h1m1 0h3m4 0h8"/></svg>`;
 
   // ── COMMANDS ──
   function buildAboutCard() {
       return `
-      <div class="-bordered label --info --block" style="padding:8px 10px;display:inline-flex;gap:24px;align-items:center;justify-content:center;">
-        <div style="display:inline-block;">
-          <div class="-bordered label --info --image --block" style="display:block;">
-            <div style="width:120px;height:120px;display:flex;align-items:center;justify-content:center;color:rgba(0,170,0,.3);font:600 12px 'Roboto Condensed';letter-spacing:2px;">[LIME.JPG]</div>
+      <div style="border:3px solid #00ff00;padding:8px 10px;display:inline-flex;gap:16px;align-items:stretch;">
+        <div style="display:flex;align-items:center;justify-content:center;">
+          <div style="width:120px;height:120px;display:flex;align-items:center;justify-content:center;border:3px solid #00ff00;">
+            <span class="label --info" style="font-size:12px;letter-spacing:2px;">[LIME.JPG]</span>
           </div>
         </div>
-        <div style="display:inline-block;vertical-align:top;">
-          <div class="text -characters" style="font:600 28px 'Roboto Condensed';letter-spacing:4px;color:#00ff00;text-shadow:-1px 1px 0 rgba(0,170,0,.5),1px -1px 0 rgba(0,170,0,.5);">Emil Vento</div>
-          <div style="font:400 18px 'Roboto Condensed';color:#fa0;text-transform:uppercase;padding:2px 0;">Junior Developer</div>
-          <div style="font:400 16px 'Roboto Condensed';color:rgba(255,170,0,.5);text-transform:uppercase;">Knowledge in:</div>
-          <div style="font:400 16px 'Roboto Condensed';color:#fa0;text-transform:uppercase;">Front end development</div>
-          <div style="font:400 16px 'Roboto Condensed';color:#fa0;text-transform:uppercase;">game development</div>
-          <div style="font:400 16px 'Roboto Condensed';color:rgba(255,170,0,.5);text-transform:uppercase;">Technologies used:</div>
-          <div style="font:400 16px 'Roboto Condensed';color:#00ff00;text-transform:uppercase;">Angular, Ionic, Next.js, Unity</div>
+        <div style="display:flex;flex-direction:column;justify-content:center;gap:1px;">
+          <span class="label --info" style="font-size:26px;font-weight:600;letter-spacing:4px;">Emil Vento</span>
+          <span class="label --info" style="font-size:18px;">Junior Developer</span>
+          <span class="label --info" style="font-size:18px;">Knowledge in:</span>
+          <span class="label --info" style="font-size:18px;">Front end development</span>
+          <span class="label --info" style="font-size:18px;">Game development</span>
+          <span class="label --info" style="font-size:18px;">Technologies used:</span>
+          <span class="label --info" style="font-size:18px;">Angular, Ionic, Next.js, Unity</span>
         </div>
-        <div style="display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8px;gap:6px;flex-shrink:0;">
-          <div>
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:4px 0;gap:6px;flex-shrink:0;">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
             ${QR_SVG}
-            <div class="label --info" style="font-size:16px;display:block;text-align:center;">limehedelma.com</div>
+            <span class="label --info" style="font-size:13px;">limehedelma.com</span>
           </div>
-          <a href="https://limehedelma.com" target="_blank" class="-bordered label button -blink" style="font-size:18px;text-decoration:none;display:block;text-align:center;">More Info</a>
+          <button onclick="handleMoreInfo()" class="label button -blink" style="font-size:18px;cursor:pointer;background:none;border:3px solid rgba(255,160,0,.7);border-radius:6px;">More Info</button>More Info</button>
         </div>
       </div>`;
   }
+
+  function buildProjectCard(tag, title, desc, techs, linkLabel, linkUrl) {
+    return `
+      <div class="-bordered --info --block" style="border-width:3px;padding:8px 10px;display:block;box-shadow:0 0 0 1px rgba(0,255,0,.7);">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;">
+          <span class="label --info" style="font-size:22px;font-weight:600;">${title}</span>
+          <span class="label -bordered --info" style="font-size:14px;border-width:2px;">${tag}</span>
+        </div>
+        <div style="margin-bottom:8px;">
+          <span class="label --info" style="font-size:16px;white-space:normal;">${desc}</span>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
+          ${techs.map(t => `<span class="label -bordered --info" style="font-size:14px;border-width:2px;">${t}</span>`).join('')}
+        </div>
+        <a href="${linkUrl}" target="_blank" class="-bordered label button -blink" style="font-size:16px;text-decoration:none;display:inline-block;border-width:2px;">${linkLabel}</a>
+      </div>`;
+  }
+
+  function buildContactCard() {
+    return `
+      <div style="border:3px solid #00ff00;padding:10px 14px;display:block;">
+        <span class="label --info" style="font-size:28px;font-weight:600;display:block;margin-bottom:10px;">Contact</span>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <a href="https://limehedelma.itch.io/" target="_blank" class="-bordered label button -blink" style="font-size:22px;text-decoration:none;">Itch.io</a>
+          <a href="mailto:limehedelma@gmail.com" class="-bordered label button -blink" style="font-size:22px;text-decoration:none;">Email</a>
+          <a href="https://discord.com/users/534676989198729217" target="_blank" class="-bordered label button -blink" style="font-size:22px;text-decoration:none;">Discord</a>
+          <a href="https://github.com/limehedelma" target="_blank" class="-bordered label button -blink" style="font-size:22px;text-decoration:none;">Github</a>
+        </div>
+      </div>`;
+  }
+
   const COMMANDS = {
 
     async about() {
       await printLine('// PERSONNEL FILE', '', 0);
       await printSep(60);
       await revealCard(buildAboutCard(), 100);
+      await printSep(200);
+      await printLine('Want to learn more? [Y / N]', '--info', 250);
+      awaitingYN = 'about_more';
     },
 
     async projects() {
@@ -543,7 +602,7 @@
       for (const [cmd, desc] of cmds) {
         await printLine(
           `<span class="label --info" style="font-size:20px;display:inline-block;min-width:130px;">${cmd}</span>` +
-          `<span class="label" style="font-size:20px;opacity:.6;">${desc}</span>`,
+          `<span class="label" style="font-size:20px;">${desc}</span>`,
           '', d
         );
         d += 70;
@@ -571,26 +630,61 @@
   async function run(raw) {
     const cmd = raw.trim().toLowerCase();
     if (!cmd) return;
+
+    // ── Y/N INTERCEPT ──
+    if (awaitingYN) {
+      const context = awaitingYN;
+      const s0 = document.createElement('div');
+      s0.style.cssText = 'height:6px;border-bottom:1px solid rgba(255,160,0,.2);margin-bottom:4px;';
+      output.appendChild(s0);
+      await printLine('$ ' + raw.trim().toUpperCase(), '--info', 0);
+      const s1 = document.createElement('div');
+      s1.style.cssText = 'height:6px;border-bottom:1px solid rgba(255,160,0,.2);margin-bottom:4px;';
+      output.appendChild(s1);
+      if (cmd === 'y' || cmd === 'yes') {
+        awaitingYN = null;
+        if (context === 'about_more') {
+          await revealCard(buildAboutMoreCard(), 100);
+        }
+      } else if (cmd === 'n' || cmd === 'no') {
+        awaitingYN = null;
+        await printLine('Understood. Type HELP for commands.', '', 80);
+      } else {
+        await printLine('Invalid input. Please type Y or N.', '--danger', 80);
+        await printLine('Want to learn more? [Y / N]', '--info', 160);
+        // keep awaitingYN set
+      }
+      return;
+    }
     const s = document.createElement('div');
-    s.style.cssText = 'height:6px;border-bottom:1px solid rgba(255,102,0,.2);margin-bottom:4px;';
+    s.style.cssText = 'height:6px;border-bottom:1px solid rgba(255,160,0,.2);margin-bottom:4px;';
     output.appendChild(s);
     await printLine('$ ' + raw.trim().toUpperCase(), '--info', 0);
     const s2 = document.createElement('div');
-    s2.style.cssText = 'height:6px;border-bottom:1px solid rgba(255,102,0,.2);margin-bottom:4px;';
+    s2.style.cssText = 'height:6px;border-bottom:1px solid rgba(255,160,0,.2);margin-bottom:4px;';
     output.appendChild(s2);
     if (COMMANDS[cmd]) {
       await COMMANDS[cmd]();
     } else {
-      await printLine('Unknown: ' + raw.trim(), '--danger', 80);
-      await printLine('Type HELP for commands.', '', 160);
+      await printLine(`Command not recognised: "${raw.trim()}"`, '--danger', 80);
+      await printLine('Type HELP to list available commands.', '', 160);
     }
   }
 
+  window.handleMoreInfo = async function() {
+    awaitingYN = null;
+    await printSep(0);
+    await printLine('$ MORE INFO', '--info', 0);
+    await printSep(60);
+    await revealCard(buildAboutMoreCard(), 100);
+  };
+
   async function boot() {
-    await printLine('Psychographic Display — System Online', '', 0);
-    await printLine('User: E.Vento &nbsp; Auth: Confirmed', '--info', 100);
+    await printLine('Limehedelma.com — System Online', '', 0);
+    const visitorId = Math.random().toString(36).substring(2, 9).toUpperCase();
+    await printLine(`User: ${visitorId} &nbsp; Auth: Confirmed`, '--info', 100);
     const s = document.createElement('div');
-    s.style.cssText = 'height:6px;border-bottom:1px solid rgba(255,102,0,.2);margin-bottom:4px;margin-top:4px;';
+    s.style.cssText = 'height:6px;border-bottom:1px solid rgba(255,160,0,.2);margin-bottom:4px;margin-top:4px;';
     setTimeout(() => output.appendChild(s), 180);
     await printLine('Type a command or click the nav.', '', 260);
     await printLine('Type HELP to list commands.', '', 330);
@@ -615,8 +709,11 @@
 
   document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.addEventListener('click', async () => {
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+      // Clear never gets active state
+      if (btn.dataset.cmd !== 'clear') {
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      }
       await run(btn.dataset.cmd);
     });
   });
