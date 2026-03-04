@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emil Vento // Terminal</title>
+  <style>
+      @import url(//fonts.googleapis.com/css?family=Roboto+Condensed:400,600,700);
+
+    body { background: #000; margin: 0; padding: 0; }
+
+    .board {
+      --glow-rgb: 255, 102, 0;
+      --text-color: #fa0;
+      --danger-fill-color: #f23;
+      --danger-glow-rgb: 255, 0, 0;
+      --danger-text-color: #f30;
+      --info-glow-rgb: 0, 170, 0;
+      --info-text-color: #00ff00;
+      --gutter-size: 8px;
+      padding-left: 1rem;
+      padding-top: 1rem;
+    }
+
+    .piece {
+      float: left;
+      margin-bottom: 1rem;
+      margin-right: 1rem;
+    }
+
+    .-bordered {
+      --border-glow-color: rgba(var(--glow-rgb), .7);
+      border-radius: var(--gutter-size);
+      border-style: solid;
+      border-width: 3px;
+      box-shadow:
+        inset 0 0 0 1px var(--border-glow-color),
+        0 0 0 1px var(--border-glow-color);
+    }
+    .-bordered.--danger { --border-glow-color: rgba(var(--danger-glow-rgb), .7); }
+    .-bordered.--info   { --border-glow-color: rgba(var(--info-glow-rgb), .7); }
+    .-bordered.--block  { border-radius: 0px; }
+
+    .-striped {
+      --stripe-color: var(--danger-fill-color);
+      --stripe-size: 15px;
+      --glow-color: rgba(var(--danger-glow-rgb), .8);
+      --glow-size: 3px;
+      --shade-3: rgba(0, 0, 0, 0.3);
+      background-image: repeating-linear-gradient(
+        -45deg,
+        var(--glow-color) calc(-1 * var(--glow-size)),
+        var(--stripe-color) 0,
+        var(--stripe-color) calc(var(--stripe-size) - var(--glow-size) / 2),
+        var(--glow-color)   calc(var(--stripe-size) + var(--glow-size) / 2),
+        transparent         calc(var(--stripe-size) + var(--glow-size) / 2),
+        transparent         calc(2 * var(--stripe-size)),
+        var(--glow-color)   calc(2 * var(--stripe-size) - var(--glow-size))
+      );
+      box-shadow: inset 0 0 1px calc(var(--glow-size) / 2) var(--shade-3);
+    }
+
+    .label {
+      display: inline-block;
+      font: 400 32px 'Roboto Condensed';
+      letter-spacing: -1px;
+      line-height: 1;
+      padding: 1px calc(var(--gutter-size) - 3px);
+      text-transform: uppercase;
+      user-select: none;
+      white-space: nowrap;
+      --text-glow-color: rgba(var(--glow-rgb), .5);
+      color: var(--text-color);
+      text-shadow:
+        -1px  1px 0 var(--text-glow-color),
+         1px -1px 0 var(--text-glow-color),
+        -1px -1px 0 var(--text-glow-color),
+         1px  1px 0 var(--text-glow-color);
+    }
+    .label.-short  { font-size: 40px; }
+    .label.--danger {
+      --text-glow-color: rgba(var(--danger-glow-rgb), .5);
+      color: var(--danger-text-color);
+    }
+    .label.--info {
+      --text-glow-color: rgba(var(--info-glow-rgb), .5);
+      color: var(--info-text-color);
+    }
+    .label.--image { padding: 0; line-height: 0; overflow: hidden; }
+    .label.--image img { display: block; width: 200px; height: 200px; object-fit: cover; }
+
+    .label + .separator { height: var(--gutter-size); }
+    .label .text.-characters { font-weight: 600; }
+
+    .label#internal {
+      --decal-width: 50px;
+      --label-corner-size: 3px;
+      --label-gutter-size: 5px;
+      display: grid;
+      column-gap: var(--label-gutter-size);
+      grid-template-columns: auto var(--decal-width);
+      padding: var(--label-corner-size);
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .label#internal .text { text-align: right; color: var(--info-text-color); --text-glow-color: rgba(var(--info-glow-rgb), .5); }
+    .label#internal .text.-characters { font-size: 48px; padding-top: var(--label-gutter-size); }
+    .label#internal .decal {
+      border-radius: calc(var(--label-corner-size) - 1px);
+      grid-area: 1 / 2 / span 2 / 2;
+    }
+
+    .hex {
+      --edge-size: 20px;
+      --diagonal-s-size: calc(var(--edge-size) * 1.75);
+      --gutter-ratio: .85;
+      --gutter-size: calc(var(--edge-size) * .35);
+      --gutter-d-size: calc(var(--edge-size) / 2);
+      float: left;
+      height: var(--diagonal-s-size);
+      margin-bottom: var(--gutter-size);
+      margin-left:  calc(var(--gutter-ratio) * var(--edge-size) / 2);
+      margin-right: calc(var(--gutter-ratio) * var(--edge-size) / 2);
+      position: relative;
+      width: var(--edge-size);
+      --fill-color: var(--danger-text-color);
+      --glow-color: rgba(var(--danger-glow-rgb), .5);
+      background: var(--fill-color);
+      box-shadow: 0 0 var(--gutter-d-size) var(--glow-color), 0 0 calc(var(--gutter-d-size) / 2) var(--glow-color);
+      --blink-duration: 3s;
+      animation-delay: .1s;
+    }
+    .hex.--info { --fill-color: var(--info-text-color); --glow-color: rgba(var(--info-glow-rgb), .5); }
+    .hex.--info.-blink { --blink-duration: 3s; }
+    .hex::before, .hex::after { content: ''; display: block; position: absolute; }
+    .hex:nth-child(odd) { top: calc((var(--diagonal-s-size) + var(--gutter-size)) / 2); }
+    .hex:nth-child(2n) { animation-delay: .2s; }
+    .hex:nth-child(3n) { animation-delay: .3s; }
+    .hex-row:nth-child(even) > .hex               { animation-delay: .3s; }
+    .hex-row:nth-child(even) > .hex:nth-child(2n) { animation-delay: .2s; }
+    .hex-row:nth-child(even) > .hex:nth-child(3n) { animation-delay: .1s; }
+
+    .-rotate-method .hex::before, .-rotate-method .hex::after {
+      background: var(--fill-color);
+      box-shadow: inherit;
+      height: var(--diagonal-s-size);
+      width: var(--edge-size);
+    }
+    .-rotate-method .hex::before { transform: rotate(60deg); }
+    .-rotate-method .hex::after  { transform: rotate(-60deg); }
+
+    @keyframes blink { 50% { opacity: 0; } }
+    .-blink {
+      animation-name: blink;
+      animation-duration: var(--blink-duration);
+      animation-iteration-count: infinite;
+      animation-timing-function: steps(1);
+    }
+    .-static .-blink { animation-play-state: paused !important; }
+
+    .label.-blink       { --blink-duration: 0.1s; }
+    .-striped.-blink    { --blink-duration: 0.1s; }
+    .--info.-blink      { --blink-duration: 2s; }
+    .button.-blink      { --blink-duration: 2s; }
+    .button.-blink:hover { --blink-duration: 0.2s; }
+
+    #sidebar, #terminal {
+      box-shadow: 0 0 0 1px var(--border-glow-color);
+    }
+
+    html, body { height: 100vh; overflow: hidden; }
+
+    #shell {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    #topbar {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+    }
+
+    #body {
+      flex: 1;
+      display: flex;
+      min-height: 0;
+      padding: 0 6px 6px 6px;
+      gap: 6px;
+    }
+
+    #sidebar {
+      width: 200px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: width 0.15s steps(4);
+    }
+    #sidebar.collapsed {
+      width: 0;
+      border-width: 0;
+      overflow: hidden;
+      box-shadow: none;
+    }
+
+    #toggle-sidebar {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    #terminal {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    #output {
+      flex: 1;
+      overflow-y: auto;
+      padding: 6px 8px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,102,0,.25) transparent;
+    }
+    #output::-webkit-scrollbar { width: 3px; }
+    #output::-webkit-scrollbar-thumb { background: rgba(255,102,0,.25); }
+
+    #input-row {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-top: 2px solid rgba(255,102,0,.3);
+    }
+
+    #cmd {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font: 400 22px 'Roboto Condensed';
+      letter-spacing: -1px;
+      text-transform: uppercase;
+      color: #00ff00;
+      caret-color: #00ff00;
+    }
+    #cmd::placeholder { color: rgba(0,170,0,.3); font: 400 22px 'Roboto Condensed'; }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      text-align: left;
+    }
+    .nav-btn .label { font-size: 22px; width: 100%; display: block; }
+    .nav-btn.active .label {
+      --text-glow-color: rgba(var(--info-glow-rgb), .6);
+      color: var(--info-text-color);
+    }
+    .nav-btn:hover .label {
+      --text-glow-color: rgba(var(--info-glow-rgb), .6);
+      color: var(--info-text-color);
+      animation: blink 1.5s steps(1) infinite;
+    }
+
+    .out-line { display: block; margin-bottom: 3px; }
+    .out-line .label { white-space: normal; font-size: 20px; }
+
+    /* ── STATIC REVEAL ── */
+    .card-wrap { margin: 8px 0; position: relative; }
+
+    @keyframes static-noise {
+      0%   { opacity: 1; background-position: 0 0; }
+      10%  { background-position: -10px 5px; }
+      20%  { background-position: 8px -8px; }
+      30%  { background-position: -5px 12px; }
+      40%  { background-position: 14px -3px; }
+      50%  { background-position: -12px 7px; }
+      60%  { background-position: 6px -14px; }
+      70%  { background-position: -8px 10px; }
+      80%  { background-position: 10px -6px; }
+      90%  { opacity: .6; }
+      100% { opacity: 0; background-position: 0 0; }
+    }
+
+    .static-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      background-size: 150px 150px;
+      background-repeat: repeat;
+      mix-blend-mode: luminosity;
+      opacity: 0.6;
+      animation: static-noise 0.2s steps(1) forwards;
+    }
+
+    .card-content { opacity: 0; transition: opacity 0.1s; }
+    .card-content.revealed { opacity: 1; }
+  </style>
+</head>
+<body>
+
+<div id="shell" class="board">
+
+  <!-- TOP BAR -->
+  <div id="topbar">
+    <button id="toggle-sidebar">
+      <span class="label -bordered --info" style="font-size:18px;" id="toggle-label">▶ SHOW</span>
+    </button>
+    <div class="label -bordered" id="clock" style="padding-left:20px;padding-right:20px;">00:00:00</div>
+  </div>
+
+  <!-- BODY -->
+  <div id="body">
+
+    <!-- SIDEBAR -->
+    <div id="sidebar" class="-bordered --info --block collapsed" style="border-width:5px;">
+
+      <!-- QR + domain at top -->
+      <div class="-bordered --info --block" style="border-width:3px;border-style:solid;border-color:rgba(0,170,0,.7);display:flex;flex-direction:column;align-items:center;padding:4px 4px 2px 4px;gap:2px;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" shape-rendering="crispEdges" style="width:80px;height:80px;color:#fa0;"><path fill="none" d="M0 0h33v33H0z"/><path stroke="currentColor" d="M4 4.5h7m3 0h1m1 0h2m2 0h1m1 0h7M4 5.5h1m5 0h1m2 0h2m3 0h2m2 0h1m5 0h1M4 6.5h1m1 0h3m1 0h1m1 0h4m2 0h3m1 0h1m1 0h3m1 0h1M4 7.5h1m1 0h3m1 0h1m1 0h4m1 0h2m3 0h1m1 0h3m1 0h1M4 8.5h1m1 0h3m1 0h1m1 0h2m6 0h1m1 0h1m1 0h3m1 0h1M4 9.5h1m5 0h1m1 0h1m2 0h2m2 0h2m1 0h1m5 0h1M4 10.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M12 11.5h2m2 0h1m1 0h3M4 12.5h1m1 0h5m3 0h1m2 0h1m1 0h1m2 0h5M4 13.5h1m2 0h3m1 0h2m1 0h1m2 0h1m2 0h1m2 0h1m3 0h1M6 14.5h1m2 0h4m1 0h1m2 0h3m5 0h1m1 0h2M5 15.5h2m1 0h1m2 0h3m2 0h1m2 0h6m3 0h1M5 16.5h2m1 0h3m3 0h1m1 0h4m1 0h2m1 0h1m1 0h3M4 17.5h4m1 0h1m1 0h1m1 0h2m5 0h1m2 0h1m1 0h1m1 0h1M4 18.5h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h3m1 0h3m1 0h3m1 0h2M4 19.5h1m2 0h2m6 0h1m2 0h7m3 0h1M4 20.5h1m1 0h1m1 0h1m1 0h2m2 0h2m1 0h8m1 0h1M12 21.5h1m1 0h1m1 0h2m1 0h2m3 0h2M4 22.5h7m6 0h2m1 0h1m1 0h1m1 0h1m1 0h3M4 23.5h1m5 0h1m1 0h2m2 0h1m1 0h1m1 0h1m3 0h2m1 0h1M4 24.5h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h9m1 0h3M4 25.5h1m1 0h3m1 0h1m1 0h1m4 0h1m1 0h1m1 0h2m1 0h5M4 26.5h1m1 0h3m1 0h1m1 0h5m1 0h3m4 0h2m1 0h1M4 27.5h1m5 0h1m2 0h1m1 0h1m2 0h8m2 0h1M4 28.5h7m1 0h1m1 0h3m4 0h8"/></svg>
+        <div class="label --info --block" style="font-size:14px;text-align:center;width:100%;box-sizing:border-box;">limehedelma.com</div>
+      </div>
+
+      <!-- nav -->
+      <button class="nav-btn active" data-cmd="about">
+        <span class="label --info --block" style="width:100%;font-size:22px;">About</span>
+      </button>
+      <button class="nav-btn" data-cmd="projects">
+        <span class="label --info --block" style="width:100%;font-size:22px;">Projects</span>
+      </button>
+      <button class="nav-btn" data-cmd="skills">
+        <span class="label --info --block" style="width:100%;font-size:22px;">Skills</span>
+      </button>
+      <button class="nav-btn" data-cmd="contact">
+        <span class="label --info --block" style="width:100%;font-size:22px;">Contact</span>
+      </button>
+      <button class="nav-btn" data-cmd="help">
+        <span class="label --info --block" style="width:100%;font-size:22px;">Help</span>
+      </button>
+      <button class="nav-btn" data-cmd="clear">
+        <span class="label --danger --block" style="width:100%;font-size:22px;">Clear</span>
+      </button>
+
+    </div>
+
+    <!-- TERMINAL -->
+    <div id="terminal" class="-bordered --block" style="border-width:5px;">
+      <div id="output"></div>
+      <div id="input-row">
+        <span class="label --info -blink" style="font-size:22px;">$&gt;</span>
+        <input id="cmd" type="text" placeholder="Type a command..." autocomplete="off" spellcheck="false">
+        <span class="label --info -blink" style="font-size:18px;padding:0 2px;">█</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // ── CLOCK ──
+  const clockEl = document.getElementById('clock');
+  function tick() {
+    const n = new Date();
+    clockEl.textContent =
+      String(n.getHours()).padStart(2,'0') + ':' +
+      String(n.getMinutes()).padStart(2,'0') + ':' +
+      String(n.getSeconds()).padStart(2,'0');
+  }
+  setInterval(tick, 1000); tick();
+
+  const output = document.getElementById('output');
+  const input  = document.getElementById('cmd');
+
+  // ── STATIC REVEAL ──
+  function revealCard(html, delay = 0) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const wrap = document.createElement('div');
+        wrap.className = 'card-wrap';
+        wrap.innerHTML = `
+          <div class="static-overlay"></div>
+          <div class="card-content">${html}</div>
+        `;
+        output.appendChild(wrap);
+        output.scrollTop = output.scrollHeight;
+        const overlay = wrap.querySelector('.static-overlay');
+        const content = wrap.querySelector('.card-content');
+        overlay.addEventListener('animationend', () => {
+          overlay.remove();
+          content.classList.add('revealed');
+          output.scrollTop = output.scrollHeight;
+        });
+        resolve();
+      }, delay);
+    });
+  }
+
+  function printLine(html, cls = '', delay = 0) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const row = document.createElement('div');
+        row.className = 'out-line';
+        row.innerHTML = cls
+          ? `<span class="label ${cls}" style="white-space:normal;font-size:20px;">${html}</span>`
+          : `<span class="label" style="white-space:normal;font-size:20px;opacity:.5;">${html}</span>`;
+        output.appendChild(row);
+        output.scrollTop = output.scrollHeight;
+        resolve();
+      }, delay);
+    });
+  }
+
+  function printSep(delay = 0) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const s = document.createElement('div');
+        s.style.cssText = 'height:6px;border-bottom:1px solid rgba(255,102,0,.2);margin-bottom:4px;';
+        output.appendChild(s);
+        output.scrollTop = output.scrollHeight;
+        resolve();
+      }, delay);
+    });
+  }
+
+  // ── PORTFOLIO COMPONENTS ──
+
+  const QR_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" shape-rendering="crispEdges" style="width:80px;height:80px;color:#fa0;"><path fill="none" d="M0 0h33v33H0z"/><path stroke="currentColor" d="M4 4.5h7m3 0h1m1 0h2m2 0h1m1 0h7M4 5.5h1m5 0h1m2 0h2m3 0h2m2 0h1m5 0h1M4 6.5h1m1 0h3m1 0h1m1 0h4m2 0h3m1 0h1m1 0h3m1 0h1M4 7.5h1m1 0h3m1 0h1m1 0h4m1 0h2m3 0h1m1 0h3m1 0h1M4 8.5h1m1 0h3m1 0h1m1 0h2m6 0h1m1 0h1m1 0h3m1 0h1M4 9.5h1m5 0h1m1 0h1m2 0h2m2 0h2m1 0h1m5 0h1M4 10.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M12 11.5h2m2 0h1m1 0h3M4 12.5h1m1 0h5m3 0h1m2 0h1m1 0h1m2 0h5M4 13.5h1m2 0h3m1 0h2m1 0h1m2 0h1m2 0h1m2 0h1m3 0h1M6 14.5h1m2 0h4m1 0h1m2 0h3m5 0h1m1 0h2M5 15.5h2m1 0h1m2 0h3m2 0h1m2 0h6m3 0h1M5 16.5h2m1 0h3m3 0h1m1 0h4m1 0h2m1 0h1m1 0h3M4 17.5h4m1 0h1m1 0h1m1 0h2m5 0h1m2 0h1m1 0h1m1 0h1M4 18.5h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h3m1 0h3m1 0h3m1 0h2M4 19.5h1m2 0h2m6 0h1m2 0h7m3 0h1M4 20.5h1m1 0h1m1 0h1m1 0h2m2 0h2m1 0h8m1 0h1M12 21.5h1m1 0h1m1 0h2m1 0h2m3 0h2M4 22.5h7m6 0h2m1 0h1m1 0h1m1 0h1m1 0h3M4 23.5h1m5 0h1m1 0h2m2 0h1m1 0h1m1 0h1m3 0h2m1 0h1M4 24.5h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h9m1 0h3M4 25.5h1m1 0h3m1 0h1m1 0h1m4 0h1m1 0h1m1 0h2m1 0h5M4 26.5h1m1 0h3m1 0h1m1 0h5m1 0h3m4 0h2m1 0h1M4 27.5h1m5 0h1m2 0h1m1 0h1m2 0h8m2 0h1M4 28.5h7m1 0h1m1 0h3m4 0h8"/></svg>`;
+
+  function buildAboutCard() {
+    return `
+      <div class="-bordered label --info --block" style="padding:8px 10px;display:inline-flex;gap:24px;align-items:center;justify-content:center;">
+        <div style="display:inline-block;">
+          <div class="-bordered label --info --image --block" style="display:block;">
+            <div style="width:120px;height:120px;display:flex;align-items:center;justify-content:center;color:rgba(0,170,0,.3);font:600 12px 'Roboto Condensed';letter-spacing:2px;">[LIME.JPG]</div>
+          </div>
+        </div>
+        <div style="display:inline-block;vertical-align:top;">
+          <div class="text -characters" style="font:600 28px 'Roboto Condensed';letter-spacing:4px;color:#00ff00;text-shadow:-1px 1px 0 rgba(0,170,0,.5),1px -1px 0 rgba(0,170,0,.5);">Emil Vento</div>
+          <div style="font:400 18px 'Roboto Condensed';color:#fa0;text-transform:uppercase;padding:2px 0;">Junior Developer</div>
+          <div style="font:400 16px 'Roboto Condensed';color:rgba(255,170,0,.5);text-transform:uppercase;">Knowledge in:</div>
+          <div style="font:400 16px 'Roboto Condensed';color:#fa0;text-transform:uppercase;">Front end development</div>
+          <div style="font:400 16px 'Roboto Condensed';color:#fa0;text-transform:uppercase;">game development</div>
+          <div style="font:400 16px 'Roboto Condensed';color:rgba(255,170,0,.5);text-transform:uppercase;">Technologies used:</div>
+          <div style="font:400 16px 'Roboto Condensed';color:#00ff00;text-transform:uppercase;">Angular, Ionic, Next.js, Unity</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8px;gap:6px;flex-shrink:0;">
+          <div>
+            ${QR_SVG}
+            <div class="label --info" style="font-size:16px;display:block;text-align:center;">limehedelma.com</div>
+          </div>
+          <a href="https://limehedelma.com" target="_blank" class="-bordered label button -blink" style="font-size:18px;text-decoration:none;display:block;text-align:center;">More Info</a>
+        </div>
+      </div>`;
+  }
+
+  function buildProjectCard(tag, title, desc, techs, linkLabel, linkHref) {
+    const techTags = techs.map(t =>
+      `<div class="label -bordered --info" style="font-size:16px;margin-right:4px;margin-bottom:4px;">${t}</div>`
+    ).join('');
+    return `
+      <div class="-bordered label --info --block" style="padding:8px 10px;">
+        <div class="-bordered label --info" style="font-size:18px;margin-bottom:6px;">${tag}</div>
+        <div style="font:400 22px 'Roboto Condensed';color:#fa0;text-transform:uppercase;margin-bottom:4px;">${title}</div>
+        <div style="font:400 16px 'Roboto Condensed';color:rgba(255,170,0,.8);text-transform:uppercase;margin-bottom:6px;white-space:normal;line-height:1.4;">${desc}</div>
+        <div style="font:400 18px 'Roboto Condensed';color:#fa0;text-transform:uppercase;margin-bottom:4px;">Technologies used:</div>
+        <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;">${techTags}</div>
+        <a href="${linkHref}" target="_blank" class="-bordered label button -blink" style="font-size:18px;text-decoration:none;">${linkLabel}</a>
+      </div>`;
+  }
+
+  function buildContactCard() {
+    return `
+      <div class="-bordered label --info --block" style="padding:8px 10px;">
+        <div style="font:400 28px 'Roboto Condensed';color:#00ff00;text-transform:uppercase;margin-bottom:8px;">Contact</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <a href="https://limehedelma.itch.io/" target="_blank" class="-bordered label button -blink" style="font-size:20px;text-decoration:none;">Itch.io</a>
+          <a href="mailto:limehedelma@gmail.com" class="-bordered label button -blink" style="font-size:20px;text-decoration:none;">Email</a>
+          <a href="https://discord.com/users/534676989198729217" target="_blank" class="-bordered label button -blink" style="font-size:20px;text-decoration:none;">Discord</a>
+          <a href="https://github.com/limehedelma" target="_blank" class="-bordered label button -blink" style="font-size:20px;text-decoration:none;">Github</a>
+        </div>
+      </div>`;
+  }
+
+  // ── COMMANDS ──
+
+  const COMMANDS = {
+
+    async about() {
+      await printLine('// PERSONNEL FILE', '', 0);
+      await printSep(60);
+      await revealCard(buildAboutCard(), 100);
+    },
+
+    async projects() {
+      await printLine('// PROJECT LIST', '', 0);
+      await printSep(60);
+      await revealCard(buildProjectCard(
+        'Web', 'Portfolio Website',
+        'A portfolio inspired by Neon Genesis Evangelion\'s UI design. Huge thanks to Peng Wang for the code snipplet.',
+        ['Next.js', 'TypeScript', 'React'],
+        'More Info', 'https://limehedelma.com'
+      ), 100);
+      await revealCard(buildProjectCard(
+        'Game Dev', 'CyberDrift 2084',
+        'A drifting game made for International College Jam 6. I did most of the coding on the game.',
+        ['Unity', 'C#'],
+        'Itch.io', 'https://limehedelma.itch.io/cyberdrift-2084'
+      ), 500);
+      await revealCard(buildProjectCard(
+        'Game Dev', 'Careeria 1989',
+        'A horror game made for Finnish College Jam 8. I did the programming and the building of the game.',
+        ['Unity', 'C#'],
+        'Itch.io', 'https://limehedelma.itch.io/careeria1989'
+      ), 900);
+    },
+
+    async skills() {
+      await printLine('// SKILL MATRIX', '', 0);
+      await printSep(60);
+      const rows = [
+        ['Next.js',    82],
+        ['Angular',    75],
+        ['Unity / C#', 78],
+        ['Ionic',      68],
+        ['TypeScript', 80],
+        ['React',      75],
+      ];
+      let d = 100;
+      for (const [name, pct] of rows) {
+        const filled = Math.round(pct / 10);
+        const bar = '█'.repeat(filled) + '░'.repeat(10 - filled);
+        await printLine(
+          `<span style="display:inline-block;min-width:120px;">${name}</span>` +
+          `<span style="color:#00ff00;letter-spacing:2px;">${bar}</span> ${pct}%`,
+          '--info', d
+        );
+        d += 80;
+      }
+    },
+
+    async contact() {
+      await printLine('// CONTACT', '', 0);
+      await printSep(60);
+      await revealCard(buildContactCard(), 100);
+    },
+
+    async help() {
+      await printLine('// COMMANDS', '', 0);
+      await printSep(60);
+      const cmds = [
+        ['about',    'Personnel file'],
+        ['projects', 'Portfolio'],
+        ['skills',   'Skill matrix'],
+        ['contact',  'Contact info'],
+        ['clear',    'Clear terminal'],
+        ['help',     'This list'],
+      ];
+      let d = 80;
+      for (const [cmd, desc] of cmds) {
+        await printLine(
+          `<span class="label --info" style="font-size:20px;display:inline-block;min-width:130px;">${cmd}</span>` +
+          `<span class="label" style="font-size:20px;opacity:.6;">${desc}</span>`,
+          '', d
+        );
+        d += 70;
+      }
+    },
+
+    async clear() {
+      output.innerHTML = '';
+      const terminal = document.getElementById('terminal');
+      const overlay = document.createElement('div');
+      overlay.style.cssText = `
+        position:absolute;inset:0;z-index:100;pointer-events:none;
+        background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+        background-size:150px 150px;mix-blend-mode:normal;opacity:0.85;background-color:#000;
+        animation:static-noise 0.3s steps(1) forwards;
+      `;
+      terminal.style.position = 'relative';
+      terminal.appendChild(overlay);
+      await new Promise(r => overlay.addEventListener('animationend', r));
+      overlay.remove();
+      await boot();
+    }
+  };
+
+  async function run(raw) {
+    const cmd = raw.trim().toLowerCase();
+    if (!cmd) return;
+    const s = document.createElement('div');
+    s.style.cssText = 'height:6px;border-bottom:1px solid rgba(255,102,0,.2);margin-bottom:4px;';
+    output.appendChild(s);
+    await printLine('$ ' + raw.trim().toUpperCase(), '--info', 0);
+    const s2 = document.createElement('div');
+    s2.style.cssText = 'height:6px;border-bottom:1px solid rgba(255,102,0,.2);margin-bottom:4px;';
+    output.appendChild(s2);
+    if (COMMANDS[cmd]) {
+      await COMMANDS[cmd]();
+    } else {
+      await printLine('Unknown: ' + raw.trim(), '--danger', 80);
+      await printLine('Type HELP for commands.', '', 160);
+    }
+  }
+
+  async function boot() {
+    await printLine('Psychographic Display — System Online', '', 0);
+    await printLine('User: E.Vento &nbsp; Auth: Confirmed', '--info', 100);
+    const s = document.createElement('div');
+    s.style.cssText = 'height:6px;border-bottom:1px solid rgba(255,102,0,.2);margin-bottom:4px;margin-top:4px;';
+    setTimeout(() => output.appendChild(s), 180);
+    await printLine('Type a command or click the nav.', '', 260);
+    await printLine('Type HELP to list commands.', '', 330);
+  }
+
+  // ── SIDEBAR TOGGLE ──
+  const sidebar = document.getElementById('sidebar');
+  const toggleBtn = document.getElementById('toggle-sidebar');
+  const toggleLabel = document.getElementById('toggle-label');
+  toggleBtn.addEventListener('click', () => {
+    const collapsed = sidebar.classList.toggle('collapsed');
+    toggleLabel.textContent = collapsed ? '▶ SHOW' : '◀ HIDE';
+    input.focus();
+  });
+
+  input.addEventListener('keydown', async e => {
+    if (e.key === 'Enter') {
+      const v = input.value; input.value = '';
+      await run(v);
+    }
+  });
+
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      await run(btn.dataset.cmd);
+    });
+  });
+
+  document.addEventListener('click', () => input.focus());
+  boot();
+  input.focus();
+</script>
+</body>
+</html>
