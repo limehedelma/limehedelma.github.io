@@ -68,24 +68,10 @@ html, body, #root { height: 100vh; overflow: hidden; }
 
 #shell { display: flex; flex-direction: column; height: 100vh; width: 100vw; }
 
-#body { flex: 1; display: flex; min-height: 0; padding: 6px; gap: 6px; }
-
-#sidebar {
-  width: 200px; flex-shrink: 0; display: flex; flex-direction: column;
-  overflow: hidden; transition: width 0.15s steps(4);
-  --border-glow-color: rgba(var(--info-glow-rgb), .7);
-  border-radius: 0px;
-  border-style: solid;
-  border-width: 3px;
-  box-shadow: inset 0 0 0 1px var(--border-glow-color), 0 0 0 1px var(--border-glow-color);
-  border-color: rgba(0,255,0,.7);
-}
-#sidebar.collapsed { width: 0; border-width: 0; overflow: hidden; box-shadow: none; }
-
-#toggle-sidebar { background: none; border: none; padding: 0; cursor: pointer; }
+#body { flex: 1; display: flex; flex-direction: column; min-height: 0; padding: 6px; gap: 6px; }
 
 #terminal {
-  flex: 1; display: flex; flex-direction: column; min-width: 0;
+  flex: 1; display: flex; flex-direction: column; min-width: 0; min-height: 0;
   --border-glow-color: rgba(var(--info-glow-rgb), .7);
   border-radius: 0px;
   border-style: solid;
@@ -120,8 +106,26 @@ html, body, #root { height: 100vh; overflow: hidden; }
 }
 #cmd::placeholder { color: rgba(0,255,0,.3); font: 400 22px 'Roboto Condensed'; }
 
-.nav-btn { background: none; border: none; padding: 0; cursor: pointer; display: block; width: 100%; text-align: left; }
-.nav-btn .label { font-size: 22px; width: 100%; display: block; }
+/* ── Bottom nav — same border system as original sidebar ── */
+#bottom-nav {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  transition: height 0.15s steps(4);
+  --border-glow-color: rgba(var(--info-glow-rgb), .7);
+  border-radius: 0px;
+  border-style: solid;
+  border-width: 3px;
+  box-shadow: inset 0 0 0 1px var(--border-glow-color), 0 0 0 1px var(--border-glow-color);
+  border-color: rgba(0,255,0,.7);
+}
+#bottom-nav.collapsed { height: 0; border-width: 0; box-shadow: none; }
+
+/* ── Nav buttons ── */
+.nav-btn { background: none; border: none; border-right: 1px solid rgba(0,255,0,.2); padding: 0; cursor: pointer; display: flex; flex: 1; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn .label { font-size: 22px; width: 100%; display: block; text-align: center; }
 .nav-btn.active .label { --text-glow-color: rgba(var(--info-glow-rgb), .6); color: var(--info-text-color); }
 .nav-btn.active .label.--danger { color: var(--danger-text-color) !important; --text-glow-color: rgba(var(--danger-glow-rgb), .5); }
 .nav-btn:hover .label:not(.--danger) { --text-glow-color: rgba(var(--info-glow-rgb), .6); color: var(--info-text-color); animation: blink 1s steps(1) infinite; }
@@ -130,7 +134,7 @@ html, body, #root { height: 100vh; overflow: hidden; }
 .out-line { display: block; margin-bottom: 3px; }
 .out-line .label { white-space: normal; font-size: 20px; }
 
-.card-wrap { margin: 8px 0; position: relative; display: inline-block; }
+.card-wrap { margin: 8px 0; position: relative; display: block; }
 
 @keyframes static-noise {
   0%   { opacity: 1; background-position: 0 0; }
@@ -168,22 +172,11 @@ html, body, #root { height: 100vh; overflow: hidden; }
 
 // ─── QR SVG strings ───────────────────────────────────────────────────────────
 const QR_PATH = `M4 4.5h7m3 0h1m1 0h2m2 0h1m1 0h7M4 5.5h1m5 0h1m2 0h2m3 0h2m2 0h1m5 0h1M4 6.5h1m1 0h3m1 0h1m1 0h4m2 0h3m1 0h1m1 0h3m1 0h1M4 7.5h1m1 0h3m1 0h1m1 0h4m1 0h2m3 0h1m1 0h3m1 0h1M4 8.5h1m1 0h3m1 0h1m1 0h2m6 0h1m1 0h1m1 0h3m1 0h1M4 9.5h1m5 0h1m1 0h1m2 0h2m2 0h2m1 0h1m5 0h1M4 10.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M12 11.5h2m2 0h1m1 0h3M4 12.5h1m1 0h5m3 0h1m2 0h1m1 0h1m2 0h5M4 13.5h1m2 0h3m1 0h2m1 0h1m2 0h1m2 0h1m2 0h1m3 0h1M6 14.5h1m2 0h4m1 0h1m2 0h3m5 0h1m1 0h2M5 15.5h2m1 0h1m2 0h3m2 0h1m2 0h6m3 0h1M5 16.5h2m1 0h3m3 0h1m1 0h4m1 0h2m1 0h1m1 0h3M4 17.5h4m1 0h1m1 0h1m1 0h2m5 0h1m2 0h1m1 0h1m1 0h1M4 18.5h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h3m1 0h3m1 0h3m1 0h2M4 19.5h1m2 0h2m6 0h1m2 0h7m3 0h1M4 20.5h1m1 0h1m1 0h1m1 0h2m2 0h2m1 0h8m1 0h1M12 21.5h1m1 0h1m1 0h2m1 0h2m3 0h2M4 22.5h7m6 0h2m1 0h1m1 0h1m1 0h1m1 0h3M4 23.5h1m5 0h1m1 0h2m2 0h1m1 0h1m1 0h1m3 0h2m1 0h1M4 24.5h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h9m1 0h3M4 25.5h1m1 0h3m1 0h1m1 0h1m4 0h1m1 0h1m1 0h2m1 0h5M4 26.5h1m1 0h3m1 0h1m1 0h5m1 0h3m4 0h2m1 0h1M4 27.5h1m5 0h1m2 0h1m1 0h1m2 0h8m2 0h1M4 28.5h7m1 0h1m1 0h3m4 0h8`
-
-function QrSvg({ size, color }: { size: number; color: string }) {
-    return (
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" shapeRendering="crispEdges"
-             style={{ width: size, height: size, color }}>
-            <path fill="none" d="M0 0h33v33H0z" />
-            <path stroke="currentColor" d={QR_PATH} />
-        </svg>
-    )
-}
-
 // ─── Constants ────────────────────────────────────────────────────────────────
 const DAYS   = ['SUN','MON','TUE','WED','THU','FRI','SAT']
 const MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC']
 
-// ─── HTML card builders (identical to original) ───────────────────────────────
+// ─── HTML card builders ───────────────────────────────────────────────────────
 function buildAboutCard(): string {
     const qr = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" shape-rendering="crispEdges" style="width:120px;height:120px;color:#00ff00;"><path fill="none" d="M0 0h33v33H0z"/><path stroke="currentColor" d="${QR_PATH}"/></svg>`
     return `
@@ -336,7 +329,7 @@ function waitMs(ms: number) {
 
 // ─── Main App ─────────────────────────────────────────────────────────────────
 export default function App() {
-    const [sidebarCollapsed, setSidebarCollapsed] = useState(true)
+    const [navCollapsed, setNavCollapsed]         = useState(true)
     const [activeNav, setActiveNav]               = useState('about')
     const [clock, setClock]                       = useState('00:00:00')
     const [date,  setDate]                        = useState('---')
@@ -458,7 +451,6 @@ export default function App() {
         await revealCard(detail, 100)
     }, [printLine, printSep, revealCard])
 
-    // delegate clicks inside output div (project detail btns + more-info btn)
     useEffect(() => {
         const out = outputRef.current
         if (!out) return
@@ -491,7 +483,6 @@ export default function App() {
         if (!cmd) return
         const out = outputRef.current; if (!out) return
 
-        // ── Y/N flow ────────────────────────────────────────────────────────────
         if (awaitingYN.current) {
             const context = awaitingYN.current
             const s0 = document.createElement('div')
@@ -514,7 +505,6 @@ export default function App() {
             return
         }
 
-        // ── normal command ──────────────────────────────────────────────────────
         const s = document.createElement('div')
         s.style.cssText = 'height:6px;border-bottom:1px solid rgba(255,160,0,.2);margin-bottom:4px;'
         out.appendChild(s)
@@ -560,13 +550,13 @@ export default function App() {
         } else if (cmd === 'help') {
             await printLine('// COMMANDS', '', 0)
             await printSep(60)
-            const cmds: [string, string][] = [
-                ['about','Personnel file'],['projects','Portfolio'],['skills','Skill matrix'],
-                ['contact','Contact info'],['clear','Clear terminal'],['help','This list']
+            const cmds: [string][] = [
+                ['about'],['projects'],['skills'],
+                ['contact'],['clear'],['help']
             ]
             let d = 80
-            for (const [c, desc] of cmds) {
-                await printLine(`<span class="label --info" style="font-size:20px;display:inline-block;min-width:130px;">${c}</span><span class="label" style="font-size:20px;">${desc}</span>`, '', d)
+            for (const [c] of cmds) {
+                await printLine(`<span class="label --info" style="font-size:20px;">${c}</span>`, '', d)
                 d += 70
             }
 
@@ -583,7 +573,6 @@ export default function App() {
         }
     }, [printLine, printSep, revealCard, boot, handleMoreInfo])
 
-    // boot on mount
     // boot on mount
     const hasBooted = useRef(false)
     useEffect(() => {
@@ -604,34 +593,13 @@ export default function App() {
         <div id="shell" className="board">
             <div id="body">
 
-                {/* SIDEBAR */}
-                <div id="sidebar" className={sidebarCollapsed ? 'collapsed' : ''}>
-                    <div style={{borderWidth:3,borderStyle:'solid',borderColor:'rgba(0,255,0,.7)',display:'flex',flexDirection:'column',alignItems:'center',padding:'4px 4px 2px 4px',gap:2}}>
-                        <QrSvg size={80} color="#ffa500" />
-                        <div className="label --info --block" style={{fontSize:14,textAlign:'center',width:'100%',boxSizing:'border-box'}}>
-                            limehedelma.com
-                        </div>
-                    </div>
-
-                    {navItems.map(cmd => (
-                        <button key={cmd} className={`nav-btn${activeNav === cmd ? ' active' : ''}`} onClick={() => handleNav(cmd)}>
-              <span className="label --info --block" style={{width:'100%',fontSize:22}}>
-                {cmd.charAt(0).toUpperCase() + cmd.slice(1)}
-              </span>
-                        </button>
-                    ))}
-                    <button className="nav-btn" onClick={() => handleNav('clear')}>
-                        <span className="label --danger --block" style={{width:'100%',fontSize:22}}>Clear</span>
-                    </button>
-                </div>
-
                 {/* TERMINAL */}
                 <div id="terminal">
                     {showClearOverlay && <div className="clear-overlay" />}
 
                     <div id="terminal-topbar">
-                        <button id="toggle-sidebar" onClick={() => setSidebarCollapsed(c => !c)}>
-                            <span className="label -bordered --info">{sidebarCollapsed ? '▶ SHOW' : '◀ HIDE'}</span>
+                        <button style={{background:'none',border:'none',padding:0,cursor:'pointer'}} onClick={() => setNavCollapsed(c => !c)}>
+                            <span className="label -bordered --info">{navCollapsed ? '▶ SHOW' : '◀ HIDE'}</span>
                         </button>
                         <div style={{display:'flex',gap:6,alignItems:'center'}}>
                             <div className="label -bordered --info" style={{paddingLeft:20,paddingRight:20}}>{date}</div>
@@ -663,6 +631,20 @@ export default function App() {
                         />
                         <span className="label --info -blink" style={{fontSize:18,padding:'0 2px'}}>█</span>
                     </div>
+                </div>
+
+                {/* BOTTOM NAV */}
+                <div id="bottom-nav" className={navCollapsed ? 'collapsed' : ''}>
+                    {navItems.map(cmd => (
+                        <button key={cmd} className={`nav-btn${activeNav === cmd ? ' active' : ''}`} onClick={() => handleNav(cmd)}>
+                            <span className="label --info --block" style={{width:'100%',fontSize:22}}>
+                                {cmd.charAt(0).toUpperCase() + cmd.slice(1)}
+                            </span>
+                        </button>
+                    ))}
+                    <button className="nav-btn" onClick={() => handleNav('clear')}>
+                        <span className="label --danger --block" style={{width:'100%',fontSize:22}}>Clear</span>
+                    </button>
                 </div>
 
             </div>
