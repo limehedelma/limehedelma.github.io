@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 
 // ─── CSS (injected as a <style> tag via useEffect) ───────────────────────────
 const GLOBAL_CSS = `
-@import url(//fonts.googleapis.com/css?family=Roboto+Condensed:400,600,700);
+@import url(https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;600;700&display=swap);
 
 * { box-sizing: border-box; }
 
